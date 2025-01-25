@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
 
@@ -10,7 +11,7 @@
 
 <form method="POST">
     {% csrf_token %}
-    {{ form.as_p }}  <!-- Render the form fields -->
+    {{ form.as_p }}
     <button type="submit">Login</button>
 </form>
 

@@ -39,21 +39,24 @@ def logout_view(request):
     return redirect('login')
 
 @login_required
-def update_profile(request): # To update the User Profile
-    profile, _ =UserProfile.objects.get_or_create(user=request.user)
+def update_profile(request):
+    profile, _ = UserProfile.objects.get_or_create(user=request.user)
     if request.method == 'POST':
-        form = UserProfileForm(request.POST, request.FILES, instance=profile)
+        form = UserProfileForm(request.POST, request.FILES, instance=profile, user=request.user)
         if form.is_valid():
             form.save()
             messages.success(request, 'Profile updated successfully')
             return redirect('profile', request.user.id)
     else:
-        form = UserProfileForm(instance=profile)
-    return render(request, 'update_profile.html', {'form': form})   
+        form = UserProfileForm(instance=profile, user=request.user)
+    return render(request, 'update_profile.html', {'form': form})
 
 @login_required
 def profile(request, user_id): # View for user profile
-    profile = get_object_or_404(UserProfile, user_id=user_id)
+    user = get_object_or_404(User, id=user_id)
+    profile = UserProfile.objects.filter(user=user).first()
+    if not profile:
+        profile = UserProfile(user=user)
     return render(request, 'profile.html', {'profile': profile})
 
 

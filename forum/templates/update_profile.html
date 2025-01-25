@@ -5,101 +5,92 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Update Profile</title>
     <style>
-        /* styles.css */
+        /* General Form Styling */
+        .container {
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
 
-    body {
-        font-family: Arial, sans-serif;
-        background-color: #f4f4f9;
-        margin: 0;
-        padding: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-    }
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333333;
+        }
 
-    .container {
-        background-color: #ffffff;
-        border-radius: 8px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        width: 400px;
-        padding: 20px;
-    }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
 
-    h2 {
-        margin-bottom: 20px;
-        text-align: center;
-        color: #333333;
-    }
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #555555;
+            font-size: 14px;
+        }
 
-    form {
-        display: flex;
-        flex-direction: column;
-    }
+        input[type="text"], input[type="file"], textarea {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #cccccc;
+            border-radius: 5px;
+            font-size: 14px;
+            background-color: #f9f9f9;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
 
-    form p {
-        margin-bottom: 15px;
-    }
+        input[type="text"]:focus, input[type="file"]:focus, textarea:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+            background-color: #ffffff;
+        }
 
-    label {
-        font-weight: bold;
-        margin-bottom: 5px;
-        display: block;
-        color: #555555;
-    }
+        .form-help {
+            font-size: 12px;
+            color: #6c757d;
+            margin-top: -8px;
+            margin-bottom: 10px;
+        }
 
-    input, select, textarea {
-        width: 100%;
-        padding: 10px;
-        margin-top: 5px;
-        margin-bottom: 10px;
-        border: 1px solid #cccccc;
-        border-radius: 4px;
-        font-size: 14px;
-    }
+        button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            background-color: #007bff;
+            color: #ffffff;
+            transition: background-color 0.3s ease, transform 0.2s;
+            margin-top: 10px;
+        }
 
-    input:focus, select:focus, textarea:focus {
-        outline: none;
-        border-color: #007bff;
-        box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-    }
+        button:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
 
-    button {
-        padding: 10px 15px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 16px;
-    }
+        .btn-secondary {
+            text-decoration: none;
+            display: block;
+            text-align: center;
+            padding: 12px 20px;
+            background-color: #6c757d;
+            color: #ffffff;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
 
-    .btn-primary {
-        background-color: #007bff;
-        color: white;
-        margin-bottom: 10px;
-    }
-
-    .btn-primary:hover {
-        background-color: #0056b3;
-    }
-
-    .btn-secondary {
-        background-color: #6c757d;
-        color: white;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        padding: 10px 15px;
-        border-radius: 4px;
-    }
-
-    .btn-secondary:hover {
-        background-color: #5a6268;
-    }
-
-    a {
-        text-decoration: none;
-    }
-
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
     </style>
 </head>
 <body>
@@ -107,9 +98,40 @@
         <h2>Update Profile</h2>
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit" class="btn btn-primary">Save</button>
-            <a href="{% url 'profile' user.id %}" class="btn btn-secondary">Cancel</a>
+            
+            <!-- Username Field -->
+            <label for="id_username">Username</label>
+            <input 
+                type="text" 
+                id="id_username" 
+                name="username" 
+                value="{{ form.username.value }}" 
+                required 
+                placeholder="Enter your username">
+            {% if form.username.help_text %}
+                <div class="form-help">{{ form.username.help_text }}</div>
+            {% endif %}
+            {% for error in form.username.errors %}
+                <div class="form-error">{{ error }}</div>
+            {% endfor %}
+
+            <!-- Profile Picture Field -->
+            <label for="id_profile_picture">Profile Picture</label>
+            <input type="file" id="id_profile_picture" name="profile_picture">
+            {% for error in form.profile_picture.errors %}
+                <div class="form-error">{{ error }}</div>
+            {% endfor %}
+
+            <!-- Bio Field -->
+            <label for="id_bio">Bio</label>
+            <textarea id="id_bio" name="bio" rows="4" placeholder="Write something about yourself">{{ form.bio.value }}</textarea>
+            {% for error in form.bio.errors %}
+                <div class="form-error">{{ error }}</div>
+            {% endfor %}
+
+            <!-- Submit and Cancel Buttons -->
+            <button type="submit">Save</button>
+            <a href="{% url 'profile' user.id %}" class="btn-secondary">Cancel</a>
         </form>
     </div>
 </body>

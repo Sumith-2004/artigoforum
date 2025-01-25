@@ -3,120 +3,105 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Profile</title>
+    <title>Profile Page</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
-            color: #333;
-            margin: 0;
-            padding: 0;
-        }
-
-        /* Container */
-        .container {
+        /* Profile Container */
+        .profile {
             max-width: 600px;
-            margin: 50px auto;
+            margin: 40px auto;
             padding: 20px;
-            background: #fff;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
             border-radius: 10px;
-        }
-
-        /* Heading */
-        .container h1 {
-            font-size: 24px;
-            color: #444;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             text-align: center;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Profile Header */
+        .profile h1 {
+            font-size: 24px;
+            color: #333;
             margin-bottom: 20px;
-            border-bottom: 2px solid #ddd;
-            padding-bottom: 10px;
-        }
-
-        /* Profile Details */
-        .container p {
-            font-size: 16px;
-            line-height: 1.5;
-            margin: 10px 0;
-        }
-
-        .container p strong {
-            color: #555;
         }
 
         /* Profile Picture */
-        .container img {
-            display: block;
-            margin: 20px auto;
+        .profile-picture img {
             border-radius: 50%;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            border: 3px solid #ccc;
+            max-width: 200px;
+            height: auto;
+            margin-bottom: 20px;
+            transition: border-color 0.3s ease-in-out;
         }
 
-        /* Button */
-        .btn {
-            display: inline-block;
-            text-decoration: none;
+        .profile-picture img:hover {
+            border-color: #007BFF; /* Adds a hover effect for the profile picture */
+        }
+        /* Profile Name */
+        .profile-name h3 {
+            font-size: 18px;
+            color: #555;
+            margin-bottom: 10px;
+            text-align: left;
+        }
+        /* Profile Bio */
+        .profile-bio h3 {
+            font-size: 18px;
+            color: #555;
+            margin-bottom: 10px;
+            text-align: left;
+        }
+
+        .profile-bio p {
             font-size: 16px;
-            padding: 10px 15px;
-            border-radius: 5px;
-            text-align: center;
-            transition: all 0.3s ease;
-        }
-
-        .btn-primary {
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-        }
-
-        .btn-primary:hover {
-            background-color: #0056b3;
-            color: #fff;
-        }
-
-        .btn-secondary {
-            background-color: #6c757d;
-            color: #fff;
-            border: none;
-        }
-
-        .btn-secondary:hover {
-            background-color: #565e64;
-            color: #fff;
+            color: #666;
+            line-height: 1.5;
+            text-align: left;
         }
 
         /* Responsive Design */
         @media (max-width: 768px) {
-            .container {
+            .profile {
                 padding: 15px;
             }
 
-            .container h1 {
+            .profile h1 {
                 font-size: 20px;
             }
 
-            .container p {
-                font-size: 14px;
+            .profile-picture img {
+                max-width: 150px;
             }
 
-            .btn {
+            .profile-bio h3 {
+                font-size: 16px;
+            }
+
+            .profile-bio p {
                 font-size: 14px;
-                padding: 8px 12px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>{{ profile.user.username }}'s Profile</h1>
-        <p><strong>Full Name:</strong> {{ profile.full_name }}</p> <!-- Assuming `full_name` is a field -->
-        <p><strong>Email:</strong> {{ profile.user.email }}</p>
-        <p><strong>Bio:</strong> {{ profile.bio }}</p> <!-- Assuming `bio` is a field -->
-        <p><strong>Joined:</strong> {{ profile.user.date_joined }}</p>
-        {% if profile.avatar %}
-            <p><img src="{{ profile.avatar.url }}" alt="Profile Picture" style="width: 150px; height: auto;"></p>
-        {% endif %}
+    <div class="profile">
+        <div class="profile-picture">
+            {% if profile.profile_picture %}
+                <img src="{{ profile.profile_picture.url }}" alt="Profile Picture">
+            {% else %}
+                <img src="/static/images/images.jpeg" alt="Default Profile Picture">
+            {% endif %}
+        </div>
+        <h1>{{ profile.user.username }} </h1>
+        <div class="profile-name">
+            </h3>{{ profile.name|default:"" }}</h3>
+        </div>
+        <div class="profile-bio">
+            <h3>{{ profile.bio|default:"" }}</h3>
+        </div>
         <a href="{% url 'update_profile' %}" class="btn btn-primary">Edit Profile</a>
+
     </div>
 </body>
 </html>
