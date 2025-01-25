@@ -1,0 +1,30 @@
+<!-- art_detail.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ artwork.title }}</title>
+</head>
+<body>
+    <h1>{{ artwork.title }}</h1>
+    <img src="{{ artwork.image.url }}" alt="{{ artwork.title }}">
+    <p>{{ artwork.description }}</p>
+    <p>Likes: {{ artwork.likes }}</p>
+    <p>Views: {{ artwork.views }}</p>
+
+    <h2>Comments</h2>
+    {% for comment in artwork.comments.all %}
+        <p>{{ comment.user.username }}: {{ comment.text }}</p>
+    {% empty %}
+        <p>No comments yet.</p>
+    {% endfor %}
+
+    <!-- Form to add a comment -->
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Add Comment</button>
+    </form>
+</body>
+</html>

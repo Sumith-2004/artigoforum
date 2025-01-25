@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artigo Forum</title>
+    <style>
+        /* General styles */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f3f4f6;
+            margin: 0;
+            padding: 0;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Header styles */
+        header {
+            background-color: #004085;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        header .logo {
+            font-size: 24px;
+            font-weight: bold;
+            text-decoration: none;
+            color: white;
+        }
+
+        header nav {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        header nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            padding: 8px 12px;
+            border-radius: 4px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        header nav a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Dropdown styles */
+        .dropdown {
+            position: relative;
+        }
+
+        .dropbtn {
+            background-color: #28a745;
+            color: white;
+            padding: 8px 12px;
+            font-size: 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: white;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .dropdown-content a {
+            color: #333;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #f8f9fa;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown:hover .dropbtn {
+            background-color: #218838;
+        }
+
+        /* Container styles */
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        /* Artwork list */
+        .artwork-item {
+            padding: 15px;
+            margin-bottom: 10px;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            background-color: #f9f9f9;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .artwork-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .artwork-item h2 {
+            margin: 0;
+            font-size: 20px;
+            color: #004085;
+        }
+
+        .artwork-item img {
+            max-width: 100%;
+            border-radius: 4px;
+            margin-top: 10px;
+            max-height: 600px;
+        }
+
+        .artwork-item p {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .artwork-meta {
+            font-size: 14px;
+            color: #999;
+        }
+
+        /* Comment section */
+        .comment {
+            padding: 10px;
+            border-top: 1px solid #e0e0e0;
+            background-color: #f9f9f9;
+        }
+
+        .comment p {
+            font-size: 14px;
+            color: #333;
+        }
+
+        .comment button {
+            background-color: #28a745;
+            color: white;
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 5px;
+        }
+
+        .comment button:hover {
+            background-color: #218838;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header nav {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="/" class="logo">Artigo Forum</a>
+        <nav>
+            <div class="dropdown">
+                <button class="dropbtn">Categories</button>
+                <div class="dropdown-content">
+                    {% for category in categories %}
+                        <a href="{% url 'category_filter' category_name=category.name %}">{{ category.name }}</a>
+                    {% endfor %}
+                </div>
+            </div>
+            <a href="{% url 'home' %}">Home</a>
+            <div class="dropdown">
+                <button class="dropbtn">Tags</button>
+                <div class="dropdown-content">
+                    {% for tag in tags %}
+                        <a href="{% url 'tag_filter' tag_name=tag.name %}">{{ tag.name }}</a>
+                    {% endfor %}
+                </div>
+            </div>
+            <a href="#">Latest</a>
+            <div class="dropdown">
+                <button class="dropbtn">Profile</button>
+                <div class="dropdown-content">
+                    <a href="{% url 'profile' user.id %}">My Profile</a>
+                    <a href="{% url 'logout' %}">Logout</a>
+                </div>
+            </div>
+            
+        </nav>
+    </header>    
+    
+    <div class="container">
+        <h1>Artworks</h1>
+
+        <!-- Display artwork items -->
+        {% for artwork in artworks %}
+        <div class="artwork-item">
+            <h2>{{ artwork.title }}</h2>
+            <p>{{ artwork.description }}</p>
+            <a href="{{ artwork.image.url }}" target="_blank">
+                <img src="{{ artwork.image.url }}" alt="{{ artwork.title }}">
+            </a>
+            <p class="artwork-meta">Views: {{ artwork.views }} | Likes: <span id="artwork-likes-{{ artwork.id }}">{{ artwork.likes }}</span></p>
+            <!-- Display Comments -->
+            {% for comment in artwork.comment_set.all %}
+            <div class="comment">
+                <p>{{ comment.user.username }}: {{ comment.text }}</p>
+                <p>Likes: <span id="comment-likes-{{ comment.id }}">{{ comment.likes }}</span></p>
+                <button class="like-comment-btn" data-comment-id="{{ comment.id }}">Like</button>
+            </div>
+            {% empty %}
+            <p>No comments yet. Be the first to comment!</p>
+            {% endfor %}
+        </div>
+        {% empty %}
+        <p>No artworks found.</p>
+        {% endfor %}
+    </div>
+</body>
+</html>

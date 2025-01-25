@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Container */
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #fff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        /* Heading */
+        .container h1 {
+            font-size: 24px;
+            color: #444;
+            text-align: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 10px;
+        }
+
+        /* Profile Details */
+        .container p {
+            font-size: 16px;
+            line-height: 1.5;
+            margin: 10px 0;
+        }
+
+        .container p strong {
+            color: #555;
+        }
+
+        /* Profile Picture */
+        .container img {
+            display: block;
+            margin: 20px auto;
+            border-radius: 50%;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Button */
+        .btn {
+            display: inline-block;
+            text-decoration: none;
+            font-size: 16px;
+            padding: 10px 15px;
+            border-radius: 5px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            color: #fff;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: #fff;
+            border: none;
+        }
+
+        .btn-secondary:hover {
+            background-color: #565e64;
+            color: #fff;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            .container h1 {
+                font-size: 20px;
+            }
+
+            .container p {
+                font-size: 14px;
+            }
+
+            .btn {
+                font-size: 14px;
+                padding: 8px 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>{{ profile.user.username }}'s Profile</h1>
+        <p><strong>Full Name:</strong> {{ profile.full_name }}</p> <!-- Assuming `full_name` is a field -->
+        <p><strong>Email:</strong> {{ profile.user.email }}</p>
+        <p><strong>Bio:</strong> {{ profile.bio }}</p> <!-- Assuming `bio` is a field -->
+        <p><strong>Joined:</strong> {{ profile.user.date_joined }}</p>
+        {% if profile.avatar %}
+            <p><img src="{{ profile.avatar.url }}" alt="Profile Picture" style="width: 150px; height: auto;"></p>
+        {% endif %}
+        <a href="{% url 'update_profile' %}" class="btn btn-primary">Edit Profile</a>
+    </div>
+</body>
+</html>
