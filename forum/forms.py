@@ -5,7 +5,7 @@ from .models import *
 class ArtworkForm(forms.ModelForm): 
     class Meta:
         model = Artwork
-        fields = ['title', 'description', 'image', 'tags']
+        fields = ['title', 'description', 'image', 'tags', 'catogories']
         widgets ={
             'description' : forms.Textarea(attrs={'rows':5}),
             'tags' : forms.CheckboxSelectMultiple(),
