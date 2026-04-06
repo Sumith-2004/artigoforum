@@ -1,107 +1,56 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile Page</title>
-    <style>
-        /* Profile Container */
-        .profile {
-            max-width: 600px;
-            margin: 40px auto;
-            padding: 20px;
-            background-color: #f9f9f9;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            font-family: Arial, sans-serif;
-        }
+{% extends 'base.html' %}
+{% load static %}
 
-        /* Profile Header */
-        .profile h1 {
-            font-size: 24px;
-            color: #333;
-            margin-bottom: 20px;
-        }
+{% block title %}{{ profile.user.username }} — Artigo{% endblock %}
 
-        /* Profile Picture */
-        .profile-picture img {
-            border-radius: 50%;
-            border: 3px solid #ccc;
-            max-width: 200px;
-            height: auto;
-            margin-bottom: 20px;
-            transition: border-color 0.3s ease-in-out;
-        }
+{% block content %}
+<div class="profile-card">
 
-        .profile-picture img:hover {
-            border-color: #007BFF; /* Adds a hover effect for the profile picture */
-        }
-        /* Profile Name */
-        .profile-name h3 {
-            font-size: 18px;
-            color: #555;
-            margin-bottom: 10px;
-            text-align: left;
-        }
-        /* Profile Bio */
-        .profile-bio h3 {
-            font-size: 18px;
-            color: #555;
-            margin-bottom: 10px;
-            text-align: left;
-        }
+    {% if profile.profile_picture %}
+    <img src="{{ profile.profile_picture.url }}" alt="Profile Picture" class="profile-avatar">
+    {% else %}
+    <img src="{% static 'images/images.jpeg' %}" alt="Default Avatar" class="profile-avatar">
+    {% endif %}
 
-        .profile-bio p {
-            font-size: 16px;
-            color: #666;
-            line-height: 1.5;
-            text-align: left;
-        }
+    <h1>{{ profile.user.username }}</h1>
+    <p class="bio">{{ profile.bio|default:"No bio yet." }}</p>
 
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .profile {
-                padding: 15px;
-            }
+    {% if user == profile.user %}
+    <a href="{% url 'update_profile' %}" class="submit-btn"
+        style="display:inline-block; width:auto; padding:10px 28px;">
+        Edit Profile
+    </a>
+    {% endif %}
 
-            .profile h1 {
-                font-size: 20px;
-            }
-
-            .profile-picture img {
-                max-width: 150px;
-            }
-
-            .profile-bio h3 {
-                font-size: 16px;
-            }
-
-            .profile-bio p {
-                font-size: 14px;
-            }
-        }
-    </style>
-</head>
-<body>
-    <div class="profile">
-        <div class="profile-picture">
-            {% if profile.profile_picture %}
-                <img src="{{ profile.profile_picture.url }}" alt="Profile Picture">
-            {% else %}
-                <img src="/static/images/images.jpeg" alt="Default Profile Picture">
-            {% endif %}
+    <!-- Artworks Section -->
+    <div style="margin-top: 40px; text-align: left;">
+        <h2 style="font-size: 22px; margin-bottom: 20px;">Artworks</h2>
+        {% if artworks %}
+        <div class="artwork-grid">
+            {% for artwork in artworks %}
+            <div class="card artwork-card">
+                <a href="{% url 'art_detail' artwork.id %}">
+                    <div class="artwork-image-wrapper">
+                        <img src="{{ artwork.image.url }}" alt="{{ artwork.title }}" class="artwork-image">
+                    </div>
+                </a>
+                <div class="card-body">
+                    <h2>{{ artwork.title }}</h2>
+                    <div class="artwork-footer">
+                        <div class="artwork-meta">
+                            <span>👁 {{ artwork.views }}</span>
+                            <span>❤️ {{ artwork.likes }}</span>
+                            <span>💬 {{ artwork.comment_set.count }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
         </div>
-        <h1>{{ profile.user.username }} </h1>
-        <div class="profile-name">
-            </h3>{{ profile.name|default:"" }}</h3>
-        </div>
-        <div class="profile-bio">
-            <h3>{{ profile.bio|default:"" }}</h3>
-        </div>
-        <a href="{% url 'update_profile' %}" class="btn btn-primary">Edit Profile</a>
-
+        {% else %}
+        <p style="color: var(--text-muted);">No artworks uploaded yet.</p>
+        {% endif %}
     </div>
-</body>
-</html>
+
+</div>
+{% endblock %}

@@ -15,6 +15,9 @@ urlpatterns = [
     path('logout/',logout_view, name='logout'),# Path for logout
     path('profile/update/', update_profile, name='update_profile'),
     path('profile/<int:user_id>/', profile, name='profile'),# Path for user profile
+    path('upload/', upload_artwork, name='upload_artwork'),
+    path('art/<int:artwork_id>/', art_detail, name='art_detail'),
+    path('art/<int:artwork_id>/comment/', add_comment, name='add_comment'),
 
 ]
 

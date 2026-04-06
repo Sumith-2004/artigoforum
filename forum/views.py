@@ -49,7 +49,7 @@ def update_profile(request):
             return redirect('profile', request.user.id)
     else:
         form = UserProfileForm(instance=profile, user=request.user)
-    return render(request, 'update_profile.html', {'form': form})
+    return render(request, 'update_profile.html', {'form': form, 'profile': profile})
 
 @login_required
 def profile(request, user_id): # View for user profile
@@ -57,7 +57,8 @@ def profile(request, user_id): # View for user profile
     profile = UserProfile.objects.filter(user=user).first()
     if not profile:
         profile = UserProfile(user=user)
-    return render(request, 'profile.html', {'profile': profile})
+    artworks = Artwork.objects.filter(created_by=user)
+    return render(request, 'profile.html', {'profile': profile, 'artworks':artworks})
 
 
 def home(request): # Home Page View
@@ -125,5 +126,12 @@ def add_comment(request, artwork_id): #  To add a comment to an art
             comment.user = request.user
             comment.save()
             messages.success(request, 'Comment added successfully')
-            return redirect('art', artwork_id)
-    return redirect('art', artwork_id)
+            return redirect('art_detail', artwork_id)
+    return redirect('art_detail', artwork_id)
+
+def art_detail(request, artwork_id):
+    artwork = get_object_or_404(Artwork, id=artwork_id)
+    artwork.views += 1
+    artwork.save()
+    form = CommentForm()
+    return render(request, 'art_detail.html', {'artwork': artwork, 'form': form})

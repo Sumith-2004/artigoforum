@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}Upload Artwork — Artigo{% endblock %}
+
+{% block content %}
+<div class="form-card" style="max-width: 560px;">
+    <h2>Upload Artwork</h2>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="submit-btn">Upload</button>
+    </form>
+</div>
+{% endblock %}
